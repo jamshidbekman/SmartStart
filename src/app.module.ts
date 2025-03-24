@@ -5,6 +5,7 @@ import { configuration } from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { JwtModule } from '@nestjs/jwt';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
     }),
     AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
