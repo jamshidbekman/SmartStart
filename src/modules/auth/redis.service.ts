@@ -31,25 +31,17 @@ export class RedisService {
 
     const getOldToken = await this.getKey(emailTokenKey);
     if (getOldToken) {
-      await this.delKey(`verification-email:${getOldToken}`);
-      await this.delKey(`email-tokens:${email}`);
+      await this.delToken(JSON.parse(getOldToken));
     }
 
     await this.setKey(verificationKey, { email }, 3600);
     await this.setKey(emailTokenKey, token, 3600);
     return token;
   }
-
   async getToken(token: string) {
     return await this.getKey(`verification-email:${token}`);
   }
-  async getEmailToken(email: string) {
-    return await this.getKey(`email-tokens:${email}`);
-  }
   async delToken(token: string) {
     return await this.delKey(`verification-email:${token}`);
-  }
-  async delEmailToken(email: string) {
-    return await this.delKey(`email-tokens:${email}`);
   }
 }

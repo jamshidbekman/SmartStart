@@ -62,22 +62,23 @@ export class AuthService {
     const savedToken = await this.redisService.getToken(token);
 
     if (!savedToken) {
-      throw new HttpException('Token eskirgan yoki mavjud emas', 410);
+      throw new HttpException('Token eskirgan', 410);
     }
 
     try {
       const tokenData = JSON.parse(savedToken);
       const email = tokenData.email;
 
-      const savedEmailToken = await this.redisService.getEmailToken(email);
-      if (!savedEmailToken || savedEmailToken !== token) {
-        throw new BadRequestException("Noto'g'ri yoki eskirgan token");
-      }
+      const findUser = await this.usersService.getUserByEmail(email);
+
+      if (!findUser)
+        throw new BadRequestException(
+          'Token xato yoki foydalanuvchi mavjud emas',
+        );
 
       const updateUserEmailStatus =
         await this.usersService.verifyEmailStatus(email);
       if (updateUserEmailStatus) {
-        await this.redisService.delEmailToken(email);
         await this.redisService.delToken(token);
         return { message: 'Emailingiz muvaffaqqiyatli tasdiqlandi' };
       }
