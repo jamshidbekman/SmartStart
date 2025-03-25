@@ -19,7 +19,7 @@ export class MailService {
     <div style="text-align: center; font-family: Arial, sans-serif;">
       <h1>Email Tasdiqlash</h1>
       <p>Emailingizni tasdiqlash uchun quyidagi tugmani bosing:</p>
-      <a href="http://localhost:4000/api/auth/verify-email?token=${token}" 
+      <a href="http://3.76.98.221:4000/api/auth/verify-email?token=${token}" 
          style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
          Emailni Tasdiqlash
       </a>
