@@ -45,18 +45,21 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/smart-start:latest
             
             # Stop and remove current container if exists
-            docker-compose down || true
+            if [ -f docker-compose.yml ]; then
+              docker-compose down
+            fi
             
             # Create .env file from GitHub secret
-            echo "${{ secrets.ENV_FILE }}" > .env
+            printf "%s" "${{ secrets.ENV_FILE }}" > .env
             
             # Create or update docker-compose.yml
             cat > docker-compose.yml << 'EOL'
             version: '3'
-            
+
             services:
               app:
                 image: ${{ secrets.DOCKER_USERNAME }}/smart-start:latest
+                container_name: smart_start
                 restart: always
                 ports:
                   - '4000:4000'
@@ -69,9 +72,10 @@ jobs:
                     condition: service_healthy
                 networks:
                   - nestjs-network
-            
+
               postgres:
                 image: postgres:16-alpine
+                container_name: postgres
                 ports:
                   - '5433:5432'
                 environment:
@@ -87,9 +91,10 @@ jobs:
                   interval: 10s
                   timeout: 5s
                   retries: 5
-            
+
               redis:
                 image: redis:7.2-alpine
+                container_name: redis
                 ports:
                   - '6380:6379'
                 command: redis-server --requirepass ${REDIS_PASSWORD}
@@ -102,23 +107,23 @@ jobs:
                   interval: 10s
                   timeout: 5s
                   retries: 5
-            
+
             volumes:
               postgres_data:
               redis_data:
-            
+
             networks:
               nestjs-network:
                 driver: bridge
             EOL
             
             # Start the application
-            docker-compose up -d
+            docker-compose up -d --remove-orphans
             
             # Prune unused images to save disk space
             docker image prune -a -f --filter "until=24h"
             
             # Check if application started successfully
             sleep 15
-            docker-compose ps
-            docker-compose logs --tail=30 app
+            docker ps --filter "name=smart_start"
+            docker logs --tail=30 -f smart_start
