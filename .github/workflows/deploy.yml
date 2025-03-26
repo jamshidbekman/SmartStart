@@ -46,7 +46,7 @@ jobs:
             
             # Stop and remove current container if exists
             if [ -f docker-compose.yml ]; then
-              docker-compose down
+              docker-compose down || true
             fi
             
             # Create .env file from GitHub secret
@@ -118,7 +118,7 @@ jobs:
             EOL
             
             # Start the application
-            docker-compose up -d --remove-orphans
+            docker-compose up -d --force-recreate --no-deps
             
             # Prune unused images to save disk space
             docker image prune -a -f --filter "until=24h"
@@ -126,4 +126,4 @@ jobs:
             # Check if application started successfully
             sleep 15
             docker ps --filter "name=smart_start"
-            docker logs --tail=30 -f smart_start
+            docker-compose logs --tail=30 app
