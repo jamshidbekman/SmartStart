@@ -12,6 +12,8 @@ import { MailService } from './mail.service';
 import { RedisService } from './redis.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
+import { StaffsService } from '../staffs/staffs.service';
+import { StaffLoginDto } from './dto/staff-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +22,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
     private readonly redisService: RedisService,
+    private readonly staffService: StaffsService,
   ) {}
   async register(createUserDto: CreateUserDto, res: Response) {
     const findUserByEmail = await this.usersService.getUserByEmail(
@@ -137,6 +140,41 @@ export class AuthService {
         email: findUser.email,
         email_verified: findUser.email_verified,
       },
+    };
+  }
+
+  async loginStaff(staffLoginDto: StaffLoginDto, res: Response) {
+    const findStaff = await this.staffService.getStaffByUsername(
+      staffLoginDto.username,
+    );
+
+    if (!findStaff)
+      throw new BadRequestException('username yoki password xato');
+
+    const comparePassword = await bcrypt.compare(
+      staffLoginDto.password,
+      findStaff.password,
+    );
+
+    if (!comparePassword)
+      throw new BadRequestException('username yoki password xato');
+
+    const payload = { user_id: findStaff.id };
+    const access_token = this.jwtService.sign(payload, { expiresIn: '1h' });
+    const refresh_token = this.jwtService.sign(payload, { expiresIn: '2d' });
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 1 * 3600 * 1000,
+    });
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 2 * 24 * 3600 * 1000,
+    });
+
+    return {
+      message: 'Tizimga muvaffaqqiyatli kirdingiz',
     };
   }
 }

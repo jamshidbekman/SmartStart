@@ -8,6 +8,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from './modules/users/users.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CategoryModule } from './modules/category/category.module';
+import { ProjectsModule } from './modules/projects/projects.module';
+import { StaffsModule } from './modules/staffs/staffs.module';
 
 @Module({
   imports: [
@@ -57,6 +60,9 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     }),
     AuthModule,
     UsersModule,
+    CategoryModule,
+    ProjectsModule,
+    StaffsModule,
   ],
   controllers: [],
   providers: [

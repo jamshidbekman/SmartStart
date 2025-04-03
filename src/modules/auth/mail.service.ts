@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { RedisService } from './redis.service';
 import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class MailService {
+  private readonly logger = new Logger('MailService')
   constructor(
     private readonly redisService: RedisService,
     private readonly mailerService: MailerService,
@@ -28,7 +29,7 @@ export class MailService {
       `,
       });
     } catch (error) {
-      console.log(error.message);
+      this.logger.log(error.message);
     }
   }
 }

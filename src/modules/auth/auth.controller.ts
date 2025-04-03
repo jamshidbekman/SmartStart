@@ -20,6 +20,7 @@ import {
 import { Response } from 'express';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { LoginDto } from './dto/login.dto';
+import { StaffLoginDto } from './dto/staff-login.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -180,5 +181,13 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return await this.authService.login(loginDto, res);
+  }
+
+  @Post('staff/login')
+  async loginStaffController(
+    @Body() staffLoginDto: StaffLoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return await this.authService.loginStaff(staffLoginDto, res);
   }
 }
