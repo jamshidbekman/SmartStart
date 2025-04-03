@@ -1,7 +1,9 @@
+import { Project } from 'src/modules/projects/entities/project.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,6 +27,9 @@ export class User {
 
   @Column({ nullable: true })
   role: string;
+
+  @OneToMany(() => Project, (project) => project.user)
+  projects: Project[]
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,14 +1,25 @@
+import { Category } from 'src/modules/category/entities/category.entity';
+import { User } from 'src/modules/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity({ name: 'projects' })
 export class Project {
   @PrimaryGeneratedColumn('increment')
   id: number;
+
+  @ManyToOne(() => User, (user) => user.projects, { onDelete: 'CASCADE' })
+  user: User;
+
+  @ManyToOne(() => Category, (category) => category.projects, {
+    onDelete: 'CASCADE',
+  })
+  category: Category;
 
   @Column({ type: 'uuid' })
   user_id: string;

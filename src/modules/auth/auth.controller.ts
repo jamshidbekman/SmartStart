@@ -7,6 +7,8 @@ import {
   Get,
   UseGuards,
   Req,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -55,7 +57,7 @@ export class AuthController {
     status: 400,
     description: "Email bilan oldin ro'yxatdan o'tilgan bo'lsa",
     example: {
-      message: "Bunday email bilan avval ro'yxatdan o'tilgan",
+      message: "Bu email bilan avval ro'yxatdan o'tilgan",
       error: 'Bad Request',
       statusCode: 400,
     },
@@ -184,6 +186,16 @@ export class AuthController {
   }
 
   @Post('staff/login')
+  @ApiOperation({ summary: 'Staff uchun login' })
+  @ApiResponse({
+    status: 400,
+    description: 'Username yoki password xato',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Tizimga muvvaffaqqiyatli kirdingiz',
+  })
+  @HttpCode(HttpStatus.OK)
   async loginStaffController(
     @Body() staffLoginDto: StaffLoginDto,
     @Res({ passthrough: true }) res: Response,

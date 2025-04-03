@@ -30,20 +30,18 @@ export class AuthService {
     );
 
     if (findUserByEmail)
-      throw new BadRequestException(
-        "Bunday email bilan avval ro'yxatdan o'tilgan",
-      );
+      throw new BadRequestException("Bu email bilan avval ro'yxatdan o'tilgan");
 
     const user = await this.usersService.createUser(createUserDto);
 
-    const payload = { user_id: user.id };
+    const payload = { user_id: user.id, role: 'user' };
     const access_token = this.jwtService.sign(payload, { expiresIn: '1h' });
     const refresh_token = this.jwtService.sign(payload, { expiresIn: '5d' });
 
     res.cookie('access_token', access_token, {
       httpOnly: true,
       sameSite: 'strict',
-      maxAge: 1 * 3600 * 1000,
+      maxAge: 5 * 24 * 3600 * 1000,
     });
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
@@ -118,13 +116,13 @@ export class AuthService {
     if (!comparePassword)
       throw new UnauthorizedException('Email yoki parol xato');
 
-    const payload = { user_id: findUser.id };
+    const payload = { user_id: findUser.id, role: findUser.role };
     const access_token = this.jwtService.sign(payload, { expiresIn: '1h' });
     const refresh_token = this.jwtService.sign(payload, { expiresIn: '5d' });
     res.cookie('access_token', access_token, {
       httpOnly: true,
       sameSite: 'strict',
-      maxAge: 1 * 3600 * 1000,
+      maxAge: 5 * 24 * 3600 * 1000,
     });
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
@@ -159,13 +157,13 @@ export class AuthService {
     if (!comparePassword)
       throw new BadRequestException('username yoki password xato');
 
-    const payload = { user_id: findStaff.id };
+    const payload = { user_id: findStaff.id, role: findStaff.role };
     const access_token = this.jwtService.sign(payload, { expiresIn: '1h' });
     const refresh_token = this.jwtService.sign(payload, { expiresIn: '2d' });
     res.cookie('access_token', access_token, {
       httpOnly: true,
       sameSite: 'strict',
-      maxAge: 1 * 3600 * 1000,
+      maxAge: 2 * 24 * 3600 * 1000,
     });
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
