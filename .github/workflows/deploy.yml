@@ -59,23 +59,23 @@ jobs:
             services:
               app:
                 image: ${{ secrets.DOCKER_USERNAME }}/smart-start:latest
-                container_name: smart_start
+                container_name: smart_start_app
                 restart: always
                 ports:
                   - '4000:4000'
                 env_file:
                   - .env
                 depends_on:
-                  postgres:
+                  smart_start_postgres:
                     condition: service_healthy
-                  redis:
+                  smart_start_redis:
                     condition: service_healthy
                 networks:
-                  - nestjs-network
+                  - smart_start_network
 
-              postgres:
+              smart_start_postgres:
                 image: postgres:16-alpine
-                container_name: postgres
+                container_name: smart_start_postgres
                 ports:
                   - '5433:5432'
                 environment:
@@ -83,25 +83,25 @@ jobs:
                   - POSTGRES_PASSWORD=${DB_PASSWORD}
                   - POSTGRES_DB=${DB_NAME}
                 volumes:
-                  - postgres_data:/var/lib/postgresql/data
+                  - smart_start_postgres_data:/var/lib/postgresql/data
                 networks:
-                  - nestjs-network
+                  - smart_start_network
                 healthcheck:
                   test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
                   interval: 10s
                   timeout: 5s
                   retries: 5
 
-              redis:
+              smart_start_redis:
                 image: redis:7.2-alpine
-                container_name: redis
+                container_name: smart_start_redis
                 ports:
                   - '6380:6379'
                 command: redis-server --requirepass ${REDIS_PASSWORD}
                 volumes:
-                  - redis_data:/data
+                  - smart_start_redis_data:/data
                 networks:
-                  - nestjs-network
+                  - smart_start_network
                 healthcheck:
                   test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
                   interval: 10s
@@ -109,11 +109,11 @@ jobs:
                   retries: 5
 
             volumes:
-              postgres_data:
-              redis_data:
+              smart_start_postgres_data:
+              smart_start_redis_data:
 
             networks:
-              nestjs-network:
+              smart_start_network:
                 driver: bridge
             EOL
             
@@ -125,5 +125,5 @@ jobs:
             
             # Check if application started successfully
             sleep 15
-            docker ps --filter "name=smart_start"
+            docker ps --filter "name=smart_start_app"
             docker-compose logs --tail=30 app

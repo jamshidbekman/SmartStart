@@ -69,7 +69,7 @@ export class CategoryController {
           text: 'tavsif',
           category: {
             id: 1,
-            name: 'Yangi kategoriya',
+            name: 'Biriktirilgan kategoriya',
             text: 'tavsif',
           },
         },
