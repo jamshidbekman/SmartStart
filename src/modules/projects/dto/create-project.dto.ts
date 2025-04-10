@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsUUID,
-  IsDecimal,
   Min,
   IsNotEmpty,
   IsDate,
@@ -27,28 +27,33 @@ export class CreateProjectDto {
   @IsUUID('4', {
     message: "Kategoriya ID to'g'ri UUID formatida bo'lishi kerak",
   })
-  category_id: string;
+  subcategory_id: string;
 
   @ApiProperty({ description: 'Loyihaning nomi' })
-  @IsString({})
+  @IsString({ message: "Loyiha nomi stringda bo'lishi kerak" })
   @IsNotEmpty({ message: "Loyiha nomi bo'sh bo'lmasligi kerak" })
   title: string;
 
   @ApiProperty({ description: 'Loyihaning batafsil tavsifi' })
-  @IsString()
+  @IsString({ message: "Loyiha tavsifi stringda bo'lishi kerak" })
   @IsNotEmpty({ message: "Loyiha tavsifi bo'sh bo'lmasligi kerak" })
   description: string;
 
   @ApiProperty({ description: 'Loyiha uchun belgilangan moliyaviy maqsad' })
-  @IsNumber()
+  @Type(() => Number)
+  @IsNumber({}, { message: 'Moliyaviy maqsad raqamlarda kiritilishi kerak' })
   @IsNotEmpty({ message: 'Moliyaviy maqsad kiritlishi kerak' })
   @Min(0, { message: "Moliyaviy maqsad manfiy bo'lishi mumkin emas" })
   funding_goal: number;
 
   @ApiProperty({ description: "Hozirda to'plangan mablag'" })
-  @IsNumber()
+  @Type(() => Number)
+  @IsNumber({}, { message: "To'plangan mablag' raqamlarda kiritilishi kerak" })
+  @IsNotEmpty({ message: "To'plangan mablag' kiritlishi kerak" })
+  @Min(0, { message: "To'plangan mablag' manfiy bo'lishi mumkin emas" })
   current_amount?: number;
 
+  @Type(() => Date)
   @ApiProperty({ description: 'Loyihaning tugash sanasi' })
   @IsNotEmpty({ message: 'Loyiha tugash sanasi kiritilishi kerak' })
   @IsDate({ message: "Sanani to'g'ri formatda kiriting" })

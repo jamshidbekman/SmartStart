@@ -84,4 +84,8 @@ export class CategoryService {
       data: categories,
     };
   }
+
+  async getSubcategoryById(id: string) {
+    return await this.subcategoryRepository.findOne({ where: { id: id } });
+  }
 }

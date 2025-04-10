@@ -1,4 +1,5 @@
 import { Category } from 'src/modules/category/entities/category.entity';
+import { Subcategory } from 'src/modules/category/entities/subcategory.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import {
   Entity,
@@ -16,16 +17,8 @@ export class Project {
   @ManyToOne(() => User, (user) => user.projects, { onDelete: 'CASCADE' })
   user: User;
 
-  @ManyToOne(() => Category, (category) => category.projects, {
-    onDelete: 'CASCADE',
-  })
-  category: Category;
-
-  @Column({ type: 'uuid' })
-  user_id: string;
-
-  @Column({ type: 'uuid' })
-  category_id: string;
+  @ManyToOne(() => Subcategory, (category) => category.projects)
+  subcategory: Subcategory;
 
   @Column({ type: 'varchar', length: 255 })
   title: string;
@@ -33,10 +26,16 @@ export class Project {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'decimal', precision: 12, scale: 2 })
   funding_goal: number;
 
-  @Column({ type: 'int', default: 0, nullable: true })
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    default: 0,
+    nullable: true,
+  })
   current_amount?: number;
 
   @CreateDateColumn()
@@ -51,4 +50,7 @@ export class Project {
     default: 'active',
   })
   status?: 'active' | 'successful' | 'failed' | 'canceled';
+
+  @Column({ default: false, nullable: true })
+  is_moderate: boolean;
 }

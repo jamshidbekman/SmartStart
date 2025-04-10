@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 import { Subcategory } from './subcategory.entity';
 import { Project } from 'src/modules/projects/entities/project.entity';
 
@@ -15,7 +21,4 @@ export class Category {
 
   @OneToMany(() => Subcategory, (subcategory) => subcategory.category)
   subcategories: Subcategory[];
-
-  @OneToMany(() => Project, (project) => project.category)
-  projects: Project[];
 }
