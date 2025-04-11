@@ -46,10 +46,10 @@ export class Project {
 
   @Column({
     type: 'enum',
-    enum: ['active', 'successful', 'failed', 'canceled'],
-    default: 'active',
+    enum: ['active', 'waiting', 'successful', 'failed', 'canceled'],
+    default: 'waiting',
   })
-  status?: 'active' | 'successful' | 'failed' | 'canceled';
+  status?: 'active' | 'waiting' | 'successful' | 'failed' | 'canceled';
 
   @Column({ default: false, nullable: true })
   is_moderate: boolean;

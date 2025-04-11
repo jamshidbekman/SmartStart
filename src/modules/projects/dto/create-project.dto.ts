@@ -61,7 +61,7 @@ export class CreateProjectDto {
 
   @ApiProperty({
     description: 'Loyihaning holati',
-    enum: ['active', 'successful', 'failed', 'canceled'],
+    enum: ['active', 'waiting', 'successful', 'failed', 'canceled'],
   })
-  status?: 'active' | 'successful' | 'failed' | 'canceled';
+  status?: 'active' | 'waiting' | 'successful' | 'failed' | 'canceled';
 }
