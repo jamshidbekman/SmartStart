@@ -202,4 +202,13 @@ export class AuthController {
   ) {
     return await this.authService.loginStaff(staffLoginDto, res);
   }
+
+  @Post('logout')
+  @ApiOperation({ summary: 'Logout qilish' })
+  @UseGuards(AuthGuard)
+  Logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+    return { message: 'Tizimdan chiqdingiz.' };
+  }
 }

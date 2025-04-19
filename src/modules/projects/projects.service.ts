@@ -70,7 +70,13 @@ export class ProjectsService {
     };
   }
 
-  async getAllProjects(status: string, limit: number, page: number) {
+  async getAllProjects(
+    status: string,
+    limit: number,
+    page: number,
+    category: string,
+    search: string,
+  ) {
     const query = this.projectRepository
       .createQueryBuilder('project')
       .leftJoinAndSelect('project.user', 'user')

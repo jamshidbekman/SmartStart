@@ -70,6 +70,20 @@ export class ProjectsController {
     description: 'Pagination uchun page',
     example: 1,
   })
+  @ApiQuery({
+    name: 'category',
+    required: false,
+    type: Number,
+    description: "Kategoriya bo'yicha filter",
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: Number,
+    description: "Proyekt nomi bo'yicha qidiruv",
+    example: 1,
+  })
   @ApiOkResponse({
     description: 'Returns list of projects with pagination info',
     schema: {
@@ -90,10 +104,18 @@ export class ProjectsController {
   @ApiNotFoundResponse({ description: 'Loyihalar topilmadi' })
   async GetAllProjectsController(
     @Query('status') status: string,
+    @Query('category') category: string,
+    @Query('search') search: string,
     @Query('limit') limit: number = 10,
     @Query('page') page: number = 1,
   ) {
-    return await this.projectsService.getAllProjects(status, limit, page);
+    return await this.projectsService.getAllProjects(
+      status,
+      limit,
+      page,
+      category,
+      search,
+    );
   }
 
   @UseGuards(AuthGuard)
