@@ -32,7 +32,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use(new LoggerMiddleware().use)
+  app.use(new LoggerMiddleware().use);
 
   await app.listen(PORT, () => {
     console.log('Server is running port', PORT);

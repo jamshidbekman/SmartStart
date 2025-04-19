@@ -40,14 +40,12 @@ export class AuthService {
 
     res.cookie('access_token', access_token, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      sameSite: 'strict',
       maxAge: 5 * 24 * 3600 * 1000,
     });
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      sameSite: 'strict',
       maxAge: 5 * 24 * 3600 * 1000,
     });
 
@@ -123,14 +121,12 @@ export class AuthService {
     const refresh_token = this.jwtService.sign(payload, { expiresIn: '5d' });
     res.cookie('access_token', access_token, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      sameSite: 'strict',
       maxAge: 5 * 24 * 3600 * 1000,
     });
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      sameSite: 'strict',
       maxAge: 5 * 24 * 3600 * 1000,
     });
 
@@ -166,14 +162,12 @@ export class AuthService {
     const refresh_token = this.jwtService.sign(payload, { expiresIn: '2d' });
     res.cookie('access_token', access_token, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      sameSite: 'strict',
       maxAge: 2 * 24 * 3600 * 1000,
     });
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
+      sameSite: 'strict',
       maxAge: 2 * 24 * 3600 * 1000,
     });
 
